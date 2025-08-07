@@ -10,6 +10,8 @@ import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisConnection;
 import io.vertx.redis.client.RedisOptions;
 import io.vertx.redis.client.Request;
+import io.vertx.test.core.Repeat;
+import io.vertx.test.core.RepeatRule;
 import io.vertx.tests.redis.containers.RedisStandalone;
 import org.junit.After;
 import org.junit.Before;
@@ -34,6 +36,9 @@ public class RedisPubSubTest {
 
   @Rule
   public final RunTestOnContext rule = new RunTestOnContext();
+
+  @Rule
+  public final RepeatRule repeat = new RepeatRule();
 
   private Redis redisPublish;
   private Redis redisSubscribe;
@@ -91,6 +96,7 @@ public class RedisPubSubTest {
   }
 
   @Test
+  @Repeat(times = 50)
   public void publishSubscribe_naive(TestContext test) {
     Async async = test.async();
 
