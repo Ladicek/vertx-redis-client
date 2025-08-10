@@ -1,7 +1,11 @@
 name: vertx-redis-client (4.x)
 on:
-  schedule:
-    - cron: '0 4 * * *'
+  push:
+    branches:
+      - '4.x'
+  pull_request:
+    branches:
+      - '4.x'
 jobs:
   CI:
     strategy:
