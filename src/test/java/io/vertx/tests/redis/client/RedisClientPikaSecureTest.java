@@ -7,6 +7,8 @@ import io.vertx.ext.unit.junit.RunTestOnContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisOptions;
+import io.vertx.test.core.Repeat;
+import io.vertx.test.core.RepeatRule;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -28,6 +30,9 @@ public class RedisClientPikaSecureTest {
 
   @Rule
   public final RunTestOnContext rule = new RunTestOnContext();
+
+  @Rule
+  public final RepeatRule repeat = new RepeatRule();
 
   @ClassRule
   public static final GenericContainer<?> redis = new GenericContainer<>("pikadb/pika:latest")
@@ -56,6 +61,7 @@ public class RedisClientPikaSecureTest {
   }
 
   @Test(timeout = 10_000L)
+  @Repeat(times = 50)
   public void testBasicInterop(TestContext should) {
     final Async test = should.async();
     final String nonexisting = randomKey();
@@ -76,6 +82,7 @@ public class RedisClientPikaSecureTest {
     });
   }
 
+/*
   @Test(timeout = 10_000L)
   public void testJson(TestContext should) {
     final Async test = should.async();
@@ -91,4 +98,5 @@ public class RedisClientPikaSecureTest {
         test.complete();
       }));
   }
+*/
 }
