@@ -56,6 +56,7 @@ public class RedisStandaloneConnection implements RedisConnectionInternal, Parse
   private boolean closed = false;
   private boolean tainted = false;
   private long expiresAt;
+  private String serverType = "redis";
 
   public RedisStandaloneConnection(VertxInternal vertx, ContextInternal context, PoolConnector.Listener connectionListener, NetSocket netSocket, PoolOptions options, int maxWaitingHandlers, RedisURI uri, ClientMetrics metrics, TracingPolicy tracingPolicy) {
     //System.out.println("<ctor>#" + this.hashCode());
@@ -523,5 +524,14 @@ public class RedisStandaloneConnection implements RedisConnectionInternal, Parse
   @Override
   public SocketAddress remoteAddress() {
     return netSocket.remoteAddress();
+  }
+
+  @Override
+  public String serverType() {
+    return serverType;
+  }
+
+  void setServerType(String serverType) {
+    this.serverType = serverType;
   }
 }

@@ -237,7 +237,7 @@ public class RedisConnectionManager implements Function<RedisConnectionManager.C
         });
     }
 
-    private Future<Void> hello(ContextInternal ctx, RedisConnection connection, RedisURI redisURI, RedisConnectOptions options) {
+    private Future<Void> hello(ContextInternal ctx, RedisStandaloneConnection connection, RedisURI redisURI, RedisConnectOptions options) {
       if (!options.isProtocolNegotiation()) {
         return ping(ctx, connection, options);
       } else {
@@ -267,6 +267,13 @@ public class RedisConnectionManager implements Function<RedisConnectionManager.C
 
         return connection
           .send(hello)
+          .onSuccess(response -> {
+            LOG.debug(response);
+            Response server = response.get("server");
+            if (server != null) {
+              connection.setServerType(server.toString());
+            }
+          })
           .<Void>mapEmpty()
           .transform(ar -> {
             if (ar.failed()) {
@@ -285,8 +292,6 @@ public class RedisConnectionManager implements Function<RedisConnectionManager.C
                   }
                 }
               }
-            } else {
-              LOG.debug(ar.result());
             }
             return (Future<Void>) ar;
           });

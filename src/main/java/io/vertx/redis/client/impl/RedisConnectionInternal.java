@@ -60,4 +60,11 @@ public interface RedisConnectionInternal extends RedisConnection {
    * Returns the {@linkplain SocketAddress remote address} of the Redis server to which this connection is connected.
    */
   SocketAddress remoteAddress();
+
+  /**
+   * Returns the server type as reported by the {@code HELLO} command (e.g. {@code "redis"} or {@code "valkey"}).
+   */
+  default String serverType() {
+    return "redis";
+  }
 }
